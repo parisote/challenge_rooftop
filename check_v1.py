@@ -4,17 +4,17 @@ import re
 import os
 from dotenv import load_dotenv
 
-def checkValue(array_order,v2):
+def checkValue(array_order,v2,token):
     v1 = array_order[-1]
     block = {'blocks': [v1,v2]}
-    check = requests.post('https://rooftop-career-switch.herokuapp.com/check?token='+TOKEN, json=block)
+    check = requests.post('https://rooftop-career-switch.herokuapp.com/check?token='+token, json=block)
     if check.json()['message']:
         array_order.append(v2)
         return True
     return False
 
 #O(n**2) :S
-def check(array_job):
+def check(array_job, token):
     original_size = len(array_job)
     array_order = []
     array_order.append(array_job.pop(0))
@@ -25,7 +25,7 @@ def check(array_job):
             if copyA[i] in array_order:
                 continue
             v2 = copyA[i]
-            if checkValue(array_order,v2):
+            if checkValue(array_order,v2,token):
                 break
 
     return array_order
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     request_block = requests.get('https://rooftop-career-switch.herokuapp.com/blocks?token='+TOKEN)
     array_job = request_block.json()['data']    
 
-    array_order = check(array_job)
+    array_order = check(array_job,TOKEN)
 
     final={'encoded':''.join(array_order)}
     result = requests.post('https://rooftop-career-switch.herokuapp.com/check?token='+TOKEN, json=final)
