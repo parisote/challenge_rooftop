@@ -1,6 +1,5 @@
 import requests
 import sys
-import json
 import re
 import os
 from dotenv import load_dotenv
