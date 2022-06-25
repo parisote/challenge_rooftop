@@ -8,25 +8,25 @@ def checkValue(array_order,v2,token):
     v1 = array_order[-1]
     block = {'blocks': [v1,v2]}
     check = requests.post('https://rooftop-career-switch.herokuapp.com/check?token='+token, json=block)
+    print(check.json()['message'])
     if check.json()['message']:
         array_order.append(v2)
         return True
     return False
 
-#O(n**2) :S
+#O(n**2)
 def check(array_job, token):
-    original_size = len(array_job)
     array_order = []
     array_order.append(array_job.pop(0))
     copyA = array_job[::-1]
-
-    while len(array_order) != original_size:
-        for i in range(len(copyA)):
-            if copyA[i] in array_order:
-                continue
-            v2 = copyA[i]
-            if checkValue(array_order,v2,token):
-                break
+    i = 0
+    while len(copyA) != 0:
+        v2 = copyA[i]
+        if checkValue(array_order,v2,token):
+            copyA.pop(i)
+            i=0
+        else:
+            i = i + 1
 
     return array_order
 
